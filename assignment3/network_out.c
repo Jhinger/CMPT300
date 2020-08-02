@@ -21,12 +21,9 @@ static long ourPORT;
 static char* hostName;
 static List* sendMessagesList;
 
-//static int socketDescriptor;
-
 struct addrinfo hints, *remoteInfo;
 static int errorCheck;
 static int count;
-
 
 void * sendThread() {
 

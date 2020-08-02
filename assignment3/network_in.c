@@ -18,7 +18,6 @@
 static long PORT;
 static pthread_t networkInPID;
 static List* recieveMessageList;
-//static int socketDescriptor;
 static char *messageRx;
 static int errorCheck;
 
@@ -28,30 +27,31 @@ struct sockaddr_in sinRemote;
 void* receiveThread() {
 
   //Setup the socket
-  struct sockaddr_in sin;
-  memset(&sin, 0, sizeof(sin));
-  sin.sin_family = AF_INET;                   
-  sin.sin_addr.s_addr = htonl(INADDR_ANY);    
-  sin.sin_port = htons(PORT);                  
-  
-  // Create the socket descriptor.
-  socketDescriptor = socket(PF_INET, SOCK_DGRAM, 0); 
-  if (socketDescriptor == -1) {
-    printf("Error creating socket in the Network In thread.\n");
-  }
-      
-  //Bind and set message to NULL.    
-  errorCheck = bind (socketDescriptor, (struct sockaddr*) &sin, sizeof(sin));
-  if (errorCheck == -1) {
-    printf("Error binding socket in the Network In thread.\n");
-  } 
+    struct sockaddr_in sin;
+    memset(&sin, 0, sizeof(sin));
+    sin.sin_family = AF_INET;                   
+    sin.sin_addr.s_addr = htonl(INADDR_ANY);    
+    sin.sin_port = htons(PORT);                  
     
+    // Create the socket descriptor.
+    socketDescriptor = socket(PF_INET, SOCK_DGRAM, 0); 
+    if (socketDescriptor == -1) {
+        printf("Error creating socket.\n");
+    }
+        
+    //Bind and set message to NULL.    
+    errorCheck = bind (socketDescriptor, (struct sockaddr*) &sin, sizeof(sin));
+    if (errorCheck == -1) {
+        printf("Error binding socket.\n");
+    }
+
     while (1) {
 
         unsigned int sin_len = sizeof(sinRemote);
-        messageRx = (char*)malloc(MSG_MAX_LEN * sizeof(char));
+        messageRx = (char*) malloc(MSG_MAX_LEN * sizeof(char));
 
-        errorCheck = recvfrom( socketDescriptor,
+        errorCheck = recvfrom( 
+                  socketDescriptor,
                   messageRx, 
                   MSG_MAX_LEN, 
                   0,

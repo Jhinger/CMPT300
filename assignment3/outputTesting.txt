@@ -1,0 +1,199 @@
+Starting s-talk application...
+
+Remote User: sdfasfa
+
+Remote User: fsa
+
+Remote User: sdfasfaa
+
+Remote User: fsaa
+
+Remote User: sdfasfad
+
+Remote User: asfd
+
+Remote User: asfdfa
+
+Remote User: sfasfdadfsa
+
+Remote User: fsasa
+
+Remote User: fsasaf
+
+Remote User: sfasfdadfsafafda
+
+Remote User: sfasfdadfsafafda
+
+Remote User: fd
+
+Remote User: asfdfasf
+
+Remote User: as
+
+Remote User: fsasaas
+
+Remote User: fasdf
+
+Remote User: sdfhstrrth
+
+Remote User: sfasfdadfsafafdaasf
+
+Remote User: asfdfasfsa
+
+Remote User: fsasadf
+
+Remote User: asfdfasfasd
+
+Remote User: fasdfasf
+
+Remote User: sdfsf
+
+Remote User: sfasfdadfsafafda
+
+Remote User: asfdfasfasdasf
+
+Remote User: asfdfasfasdasffsda
+
+Remote User: fasdfsadf
+
+Remote User: asfdfasfasdasfasdf
+
+Remote User: asfdfasfasdasffsda
+
+Remote User: asfdfasfasdasfasdfa
+
+Remote User: asfdfasfasdasffsdaasdfds
+
+Remote User: asfdfasfasdasfasdf
+
+Remote User: asfdfasfasdasfasdf
+
+Remote User: asfdfasfasdasfasdf
+
+Remote User: asdasf
+
+Remote User: asfdfasfasdasffsda
+
+Remote User: fasdfsadf
+
+Remote User: asfdfasfasdasfasdf
+
+Remote User: asdasf
+
+Remote User: asfdfasfasdasffsda
+
+Remote User: fasdfsadf
+
+Remote User: asfdfasfasdasfasdf
+
+Remote User: asdasf
+
+Remote User: asfdfasfasdasffsda
+
+Remote User: fasdfsadf
+
+Remote User: asfdfasfasdasfasdf
+
+Remote User: asdasf
+
+Remote User: asfdfasfasdasffsda
+
+Remote User: fasdfsadf
+
+Remote User: asfdfasfasdasfasdf
+
+Remote User: asdasf
+
+Remote User: asfdfasfasdasffsda
+
+Remote User: fasdfsadf
+
+Remote User: asfdfasfasdasfasdf
+
+Remote User: asdasf
+
+Remote User: asfdfasfasdasffsda
+
+Remote User: fasdfsadf
+
+Remote User: asfdfasfasdasfasdf
+
+Remote User: asdasf
+
+Remote User: asfdfasfasdasffsda
+
+Remote User: fasdfsadf
+
+Remote User: asfdfasfasdasfasdf
+
+Remote User: asdasf
+
+Remote User: asfdfasfasdasffsda
+
+Remote User: fasdfsadf
+
+Remote User: asfdfasfasdasfasdf
+
+Remote User: asdasf
+
+Remote User: asfdfasfasdasffsda
+
+Remote User: fasdfsadf
+
+Remote User: asfdfasfasdasfasdf
+
+Remote User: asdasf
+
+Remote User: asfdfasfasdasffsda
+
+Remote User: fasdfsadf
+
+Remote User: asfdfasfasdasfasdf
+
+Remote User: asdasf
+
+Remote User: asfdfasfasdasffsda
+
+Remote User: fasdfsadf
+
+Remote User: asfdfasfasdasfasdf
+
+Remote User: asdasf
+
+Remote User: asfdfasfasdasffsda
+
+Remote User: fasdfsadf
+
+Remote User: asfdfasfasdasfasdf
+
+Remote User: asdasf
+
+Remote User: asfdfasfasdasffsda
+
+Remote User: fasdfsadf
+
+Remote User: asfdfasfasdasfasdf
+
+Remote User: asdasf
+
+Remote User: asfdfasfasdasffsda
+
+Remote User: fasdfsadf
+
+Remote User: asfdfasfasdasfasdf
+
+Remote User: asdasf
+
+Remote User: asfdfasfasdasffsda
+
+Remote User: fasdfsadf
+
+Remote User: asfdfasfasdasfasdf
+
+Remote User: sdf
+Keyboard thread shutting down...
+Network out thread shutting down...
+Network in thread shutting down...
+Screen out thread shutting down
+
+Remote User: 

@@ -11,8 +11,4 @@ void* receiveThread();
 
 void networkIn_join();
 
-void setupSocket();
-
-void setupRemote();
-
 #endif
