@@ -9,4 +9,6 @@ int getFileInfo(char * pathName, struct stat * fileInfo);
 
 void printFileInfo(struct stat fileInfo, char * fileName);
 
+int getLastOptionIndex(int numArguments, char * arguments[]);
+
 #endif
