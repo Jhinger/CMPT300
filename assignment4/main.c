@@ -3,13 +3,42 @@
 #include "information.h"
 
 int main(int numArgs, char * args[]) {
-    char * fileName = args[1];
-    struct stat fileInfo;
-    int check = 0;
 
-    if ((check = getFileInfo(fileName, &fileInfo)) != 0) {
-        perror("Error getting file information.\n");
+    if(numArgs == 1){//means we are just doing ls to current directory
+        printf("\nbehaving like normal ls\n");
+        printFilesInDirectory(".");
     }
 
-    printFileInfo(fileInfo, fileName);
-}
+    if(numArgs == 2 ){
+        if(strcmp(args[1],"-l")== 0){//means we are just doing ls -l on current directory
+            longListingCurr(".");
+        }
+
+        else if(strcmp(args[1],"-i")== 0){//means we are just doing ls -i on current directory
+            printInode(".");
+        }
+
+        else if(strcmp(args[1],"-r")== 0){//means we are just doing ls -r on current directory
+            
+        }
+
+        else{// maybe check for star here
+            printFilesInDirectory(args[1]); //means we are doing ls on a certain directory eg ls ..
+        }
+
+    }
+
+    if(numArgs == 3 ){
+        if(strcmp(args[1],"-l")== 0){//means we are just doing ls -l on certain directory
+            longListingCurr(args[2]);
+        }
+
+        else if(strcmp(args[1],"-i")== 0){//means we are just doing ls -i on certain directory
+            printInode(args[2]);
+        }
+
+        else if(strcmp(args[1],"-R")== 0){//means we are just doing ls -r on certain directory
+            
+        }
+    }
+} 

@@ -6,3 +6,5 @@ all: build
 build:
 	$(TARGET)
 	
+test:
+	gcc search.c information.c -o test -Wall
