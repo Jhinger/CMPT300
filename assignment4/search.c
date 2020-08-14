@@ -3,104 +3,75 @@
 #include <stdlib.h>
 #include "search.h"
 #include "information.h"
+#include<stdbool.h>
 
-//Finds all the subdirectories in the currentDirectory.
-directoryInformation findDirectories(char * currentDirectory) {
-    directoryInformation info;
-    DIR * dir;
-    struct dirent * directory;
-    dir = opendir(currentDirectory);
+//Recursively sorts and prints all files in the path that is specified.
+void depthSearch(char * path, bool ilR_Array[]) {
+    struct dirent* currentDir;
+	struct dirent ** directoryArray;
+	char* folderArray[1024];
+	int folderCount = 0;
 
-    info.size = 0;
-    while((directory = readdir(dir)) != NULL){ 
-        //If it's not a directory.
-        if (directory -> d_type != DT_DIR) {
-            continue;
-        }
+	//Alphasort is built in - organizes it into directoryArray.
+	int numFiles = scandir(path, &directoryArray, 0, alphasort);
 
-        //If it's hidden file, ignore.
-        if (strcmp(directory->d_name, ".") != 0 && strcmp(directory->d_name, "..") == 0) {
-            continue;
-        }
-
-        info.subdirectories[info.size] = *directory;
-        info.size++;
-    }
-    closedir(dir);
-    return info;
-}
-
-
-//Recursively sorts and prints.
-void depthSearch(char * path) {
-    struct dirent* dp;
-	struct stat buf;
-	struct dirent ** entryList;
-	char* dirList[1024];
-	int dirNum = 0;
-
-	// Scan the dir and sort it lexicographically using alphasort
-	int count = scandir(path, &entryList, 0, alphasort);
-
-	// Scan dir failure 
-	if (count <= 0){
-		printf("dfs_print scandir failure\n");
-		exit(1);
+	//No need to return error message - just return.
+	if (numFiles <= 0){
+		return;
 	}
 
-	// Loop through all entries in the corresponding dir path
+	//Loop through directoryArray - Recurse if folder, otherwise it continues in the loop.
+	//Print path name first.
 	printf("%s:\n", path);
-	for(int k = 0; k < count; k++)
+	//inder changes
+    int padding = 0;
+	int largestFileDigit = 0;
+	if(ilR_Array[0] == true){
+		for(int j=0; j < numFiles;j++){
+			currentDir = directoryArray[j];
+			largestFileDigit = fileSizeDigitCounter(path, currentDir -> d_name, largestFileDigit);
+			padding = inodeDigitCounter(path,currentDir->d_name,padding);
+		}
+	}
+
+	for (int i = 0; i < numFiles; i++)
 	{	
-		dp = entryList[k];
+		currentDir = directoryArray[i];
 
-		char temp[1024];
-    	if(path[strlen(path)-1] == '/') {
-        	snprintf(temp, sizeof(temp), "%s%s", path, dp->d_name);
-        } else {
-        	snprintf(temp, sizeof(temp), "%s/%s", path, dp->d_name);
-        }
-
-		int error = stat(temp, &buf);
-
-		// check stat failure
-		if (error < 0){
-			printf("dfs_print static error");
-			exit(1);
+		//If currentDir is a directory and not a hidden file.
+		if (currentDir -> d_type == DT_DIR && checkHiddenFile(currentDir->d_name)) {
+			char * nextPath = (char *) malloc(MAX_NAME_LEN);
+			if (path[strlen(path) - 1] == '/') {
+				snprintf(nextPath, MAX_NAME_LEN, "%s%s", path, currentDir -> d_name);
+			} else {
+				snprintf(nextPath, MAX_NAME_LEN, "%s/%s", path, currentDir -> d_name);
+			}
+			folderArray[folderCount] = nextPath;
+			folderCount++;
+			
+			//Call printing file information here.
+            universalPrint(path,currentDir -> d_name, ilR_Array,padding, largestFileDigit);
 		}
 
-		// if dp is a directory and is not hiden file, "." or ".." 
-		if (dp -> d_type == DT_DIR && checkHiddenFile(dp->d_name)){
-			char* newPath = (char*) malloc(1024*sizeof(char));
-			snprintf(newPath, 1024, "%s/%s", path, dp->d_name);
-			dirList[dirNum] = newPath;
-			dirNum++;
-			//print_info_base_on_path(newPath, dp, i, l);
-            printf("%s\n", dp -> d_name);
+		//Otherwise, if the file is not hidden.
+		else if (checkHiddenFile(currentDir->d_name)) {
+			char nextPath[MAX_NAME_LEN];
+			snprintf(nextPath, MAX_NAME_LEN, "%s/%s", path, currentDir->d_name);
+			
+			//Call printing file information here.
+			universalPrint(path,currentDir -> d_name, ilR_Array,padding, largestFileDigit);  
 		}
 
-		// if dp is file and is not hiden file, "." or ".." 
-		else if (checkHiddenFile(dp->d_name)){
-			char newPath[1024];
-			snprintf(newPath, sizeof(newPath), "%s/%s", path, dp->d_name);
-			//print_info_base_on_path(newPath, dp, i, l);
-            printf("%s\n", dp -> d_name);
-		}
-
-		free(dp);
+		free(currentDir);
 	}
 
-	// recursive call
-	for (int p = 0; p < dirNum; p++){
+	//Recursively call depthSearch on only the folders.
+	for (int p = 0; p < folderCount; p++){
 		printf("\n");
-		depthSearch(dirList[p]);
+		depthSearch(folderArray[p],ilR_Array);
 	}
 
-	// clean up
-	for (int q = 0; q < dirNum; q++) {
-		free(dirList[q]);
-	    free(entryList);
-    }
+	freeArrays(folderArray, directoryArray, folderCount);
 }
 
 //Returns false if hidden file so that it cannot pass in depthSearch.
@@ -111,6 +82,9 @@ int checkHiddenFile(char * name) {
     return 1;
 }
 
-int main(int numArgs, char ** args) {
-    depthSearch(args[1]);
+void freeArrays(char ** folderArray, struct dirent ** directoryArray, int folderCount) {
+	for (int j = 0; j < folderCount; j++) {
+		free(folderArray[j]);
+    }
+	free(directoryArray);
 }

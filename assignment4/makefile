@@ -1,10 +1,13 @@
 
-TARGET = gcc main.c information.c -o main -Wall
+TARGET = gcc main.c information.c search.c -o myls -Wall
 
 all: build
 
 build:
 	$(TARGET)
 	
-test:
-	gcc search.c information.c -o test -Wall
+clean:
+	rm -f myls
+
+valgrind:
+	valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes ./myls -ilR .

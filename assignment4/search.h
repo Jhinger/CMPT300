@@ -8,24 +8,17 @@
 #include <time.h>
 #include <grp.h>
 #include <pwd.h>
+#include<stdbool.h>
 
-#define MAX_FILES 1024
-#define MAX_NAME_LEN 1024
+#define MAX_FILES 4096
+#define MAX_NAME_LEN 4096
 
-//Struct with array storing subdirectories and size of the array.
-typedef struct dirInfo {
-    struct dirent subdirectories[MAX_FILES];
-    int size;
-} directoryInformation;
-
-//Returns an array of directories in currentDirectory.
-directoryInformation findDirectories(char * currentDirectory);
-
-//Have an exit clause that exits the function once no directories are found?
-void depthSearch(char * path);
-
-void testPrintDeleteLater();
+void depthSearch(char * path, bool ilR_Array[]);
 
 int checkHiddenFile(char * name);
+
+void freeArrays(char ** folderArray, struct dirent ** directoryArray, int folderCount);
+
+void printFormat(char * nextPath, int length, char * currentPath, char * filename);
 
 #endif
