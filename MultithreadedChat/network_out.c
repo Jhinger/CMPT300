@@ -3,11 +3,10 @@
 #include <pthread.h>
 #include <stdlib.h>
 #include <netdb.h>
-#include <string.h>			// for strncmp()
-#include <unistd.h>			// for close()
+#include <string.h>			
+#include <unistd.h>			
 #include <pthread.h>
 #include <signal.h>
-
 #include "network_out.h"
 #include "network_in.h"
 #include "keyboard_in.h"
@@ -20,14 +19,11 @@ static char* destPORT;
 static long ourPORT;
 static char* hostName;
 static List* sendMessagesList;
-
 struct addrinfo hints, *remoteInfo;
 static int errorCheck;
 static int count;
 
 void * sendThread() {
-
-    //Setting up hints struct for getaddrinfo
     memset(&hints, 0, sizeof(hints));
     hints.ai_family = AF_INET;
     hints.ai_socktype = SOCK_DGRAM;
@@ -40,11 +36,8 @@ void * sendThread() {
         exit(EXIT_FAILURE);
     }
 
-    while(1){
-
+    while(1) {
         count = List_count(sendMessagesList);
-
-        //While the buffer is empty (Nothing to send), block until we get something.
         if (count == 0) {
             lockKeyboardMutex();
             waitKeyboardCond();
@@ -53,15 +46,13 @@ void * sendThread() {
 
         //Take control of the mutex for the CS.
         lockKeyboardMutex();
-
         List_first(sendMessagesList);
-        char* message = List_remove(sendMessagesList);
+        char * message = List_remove(sendMessagesList);
             
         //Send the item, and some error checking.
         if (sendto(socketDescriptor, message, MAX_MSG_LENGTH, 0, remoteInfo -> ai_addr, remoteInfo -> ai_addrlen) == -1) {
             printf("Error sending message in Network Out.\n");
         }
-
         unlockKeyboardMutex();
 
         //Determine whether we are aborting or not.
@@ -72,18 +63,15 @@ void * sendThread() {
             networkIn_shutdown();
             networkOut_shutdown(); 
         }
-
         free(message);
     } 
     return NULL;
 }
 
 //Initialize the NetworkOut module.
-void networkOut_init(char* destP,long ourP, char* name){
-    
+void networkOut_init(char* destP, long ourP, char* name){
     sendMessagesList = List_create();
     keyboardIn_init(sendMessagesList);
-    
     destPORT = destP;
     ourPORT = ourP;
     hostName = name;
@@ -105,9 +93,7 @@ void networkOut_shutdown() {
     sleep(1);
     freeaddrinfo(remoteInfo);
     keyboardIn_shutdown();
-     
     close(socketDescriptor);
-
     pthread_cancel(networkOutPID); 
     printf("Network out thread shutting down...\n");
 }
@@ -115,5 +101,3 @@ void networkOut_shutdown() {
 void networkOut_join(){
     pthread_join(networkOutPID, NULL);
 }
-
-
