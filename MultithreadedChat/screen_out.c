@@ -3,9 +3,8 @@
 #include <string.h>
 #include <stdlib.h>
 #include <pthread.h>
-#include <string.h>			// for strncmp()
-#include <unistd.h>			// for close()
-
+#include <string.h>			
+#include <unistd.h>			
 #include "screen_out.h"
 #include "list.h"
 #include "keyboard_in.h"
@@ -15,18 +14,12 @@
 static List* recieveMessageList;
 static pthread_t screenOutPID;
 
-//Condition Variable
 pthread_cond_t cond_receiveListEmpty = PTHREAD_COND_INITIALIZER;
-
-//Mutex for CS
 pthread_mutex_t sem_receiveListLock = PTHREAD_MUTEX_INITIALIZER;
 
-void* screenOutThread(){
-
-    while (1){
+void* screenOutThread() {
+    while (1) {
         int count = List_count(recieveMessageList);
-
-        //While the buffer is empty (Nothing to send), block until we get something.
         if (count == 0) {
             lockScreenOutMutex();
             waitScreenOutCond();
@@ -35,22 +28,17 @@ void* screenOutThread(){
        
         //Take control of the lock.
         lockScreenOutMutex();
-
         List_first(recieveMessageList);
         char* message = List_remove(recieveMessageList);
 
-        //Check whether we are aborting or not.
         size_t len = strlen(message) - 1;
         if (message[0] == '!' && len == 1) {
-
             unlockScreenOutMutex();
             destroyScreenMutCon();
-            
             free(message);
             networkOut_shutdown();
             networkIn_shutdown(); 		        
-		}
-
+	}
         printf("\nRemote User: ");
         fflush(stdout);
         fputs(message, stdout);
@@ -59,7 +47,6 @@ void* screenOutThread(){
         //Unlock the NetworkIn thread can continue.
         unlockScreenOutMutex();
     }
-    
     return NULL;
 }
 
@@ -71,6 +58,7 @@ void screenOut_init(List* list){
                         NULL,
                         screenOutThread,
                         NULL);
+	
     if (threadCheck != 0) {
         printf("Failed to create networkOut thread.\n");
     }
