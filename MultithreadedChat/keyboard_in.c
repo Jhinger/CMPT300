@@ -3,9 +3,8 @@
 #include <string.h>
 #include <stdlib.h>
 #include <pthread.h>
-#include <string.h>			// for strncmp()
-#include <unistd.h>			// for close()
-
+#include <string.h>		
+#include <unistd.h>			
 #include "keyboard_in.h"
 #include "list.h"
 #include "screen_out.h"
@@ -36,9 +35,7 @@ void* receiveInput(){
 
     //Take control of the lock to append item; unlock and signal afterwards.
     lockKeyboardMutex();
-
     List_append(sendMessagesList, message);
-
     unlockKeyboardMutex();
     signalKeyboardCond();
   }
