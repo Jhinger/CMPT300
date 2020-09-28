@@ -3,11 +3,10 @@
 #include <pthread.h>
 #include <stdlib.h>
 #include <netdb.h>
-#include <string.h>			// for strncmp()
-#include <unistd.h>			// for close()
+#include <string.h>			
+#include <unistd.h>			
 #include <pthread.h>
 #include <signal.h>
-
 #include "network_in.h"
 #include "network_out.h"
 #include "list.h"
@@ -20,13 +19,10 @@ static pthread_t networkInPID;
 static List* recieveMessageList;
 static char *messageRx;
 static int errorCheck;
-
 struct sockaddr_in sinRemote;
   
 //Receive thread that receives packet from remote address.  
 void* receiveThread() {
-
-  //Setup the socket
     struct sockaddr_in sin;
     memset(&sin, 0, sizeof(sin));
     sin.sin_family = AF_INET;                   
@@ -46,10 +42,8 @@ void* receiveThread() {
     }
 
     while (1) {
-
         unsigned int sin_len = sizeof(sinRemote);
         messageRx = (char*) malloc(MSG_MAX_LEN * sizeof(char));
-
         errorCheck = recvfrom( 
                   socketDescriptor,
                   messageRx, 
@@ -65,22 +59,17 @@ void* receiveThread() {
 
         //Take control of the lock and append item so screen thread can also access it.
         lockScreenOutMutex();
-  
         List_append(recieveMessageList, messageRx);
-
         unlockScreenOutMutex();
         signalScreenOutCond();  
     }
-
     return NULL;
 }
 
 //Initialize the NetworkIn module.
 void networkIn_init(long recieverPort){
-  
   recieveMessageList = List_create();  
   screenOut_init(recieveMessageList);
-  
   PORT = recieverPort;
   int threadCheck = pthread_create(
                     &networkInPID,
@@ -95,16 +84,12 @@ void networkIn_init(long recieverPort){
 
 //Shutdown the NetworkIn module.
 void networkIn_shutdown(){
-    //We are allowed to sleep in shutdown to allow lists to clear.
     sleep(1);
     free(messageRx);
     messageRx = NULL;
-
     close(socketDescriptor);
-
     printf("Network in thread shutting down...\n");
     pthread_cancel(networkInPID);
-
     screenOut_shutdown();
 }
 
