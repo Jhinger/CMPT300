@@ -50,7 +50,7 @@ void depthSearch(char * path, bool ilR_Array[]) {
 			folderCount++;
 			
 			//Call printing file information here.
-            universalPrint(path,currentDir -> d_name, ilR_Array,padding, largestFileDigit);
+            		universalPrint(path,currentDir -> d_name, ilR_Array,padding, largestFileDigit);
 		}
 
 		//Otherwise, if the file is not hidden.
@@ -61,7 +61,6 @@ void depthSearch(char * path, bool ilR_Array[]) {
 			//Call printing file information here.
 			universalPrint(path,currentDir -> d_name, ilR_Array,padding, largestFileDigit);  
 		}
-
 		free(currentDir);
 	}
 
@@ -70,7 +69,6 @@ void depthSearch(char * path, bool ilR_Array[]) {
 		printf("\n");
 		depthSearch(folderArray[p],ilR_Array);
 	}
-
 	freeArrays(folderArray, directoryArray, folderCount);
 }
 
