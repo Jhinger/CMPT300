@@ -35,20 +35,19 @@ void universalPrint(char* path, char* name, bool ilR_Array[],int padding, int la
     strcat(temp,"/");
     strcat(temp,name);
 
-
     struct stat fileInfo;
     getFileInfo(temp,&fileInfo);
 
-
-    if(ilR_Array[0]){
+    if (ilR_Array[0]) {
         printf("%*.llu ",padding,(unsigned long long) fileInfo.st_ino);
     }
-    if(ilR_Array[1]){
+    if (ilR_Array[1]) {
         printMode(fileInfo.st_mode);
         printf("%llu ", (unsigned long long) fileInfo.st_nlink);
         getAndPrintUserName(fileInfo.st_uid);
         getAndPrintGroup(fileInfo.st_gid);
-        printf("%*li ", largestFileDigit, fileInfo.st_size); // we need to fix this padding
+        
+        printf("%*li ", largestFileDigit, fileInfo.st_size); 
         printDate(fileInfo.st_mtime);
     }
 
@@ -72,10 +71,8 @@ void universalPrint(char* path, char* name, bool ilR_Array[],int padding, int la
         } else if (!hasInvalidChar(name) && !hasInvalidChar(buf)) {
             printf("%s -> %s", name, buf);
         }
-    }
-    
+    }  
     printf("\n");
-    
     free(temp);
     free(buf);
 }
@@ -83,11 +80,11 @@ void universalPrint(char* path, char* name, bool ilR_Array[],int padding, int la
 void printFilesInDirectory(char* directory){ // this is if user does ls command only
     DIR *dir;
     struct dirent *dirStruct;
-    dir = opendir(directory);//we can pass in different directories here!*********************************
+    dir = opendir(directory);
 
     int length = 0;
     struct dirent dirStructArray[50];
-    while((dirStruct = readdir(dir)) != NULL){
+    while ((dirStruct = readdir(dir)) != NULL){
         dirStructArray[length] = *dirStruct;
         length++;
     }
@@ -98,18 +95,16 @@ void printFilesInDirectory(char* directory){ // this is if user does ls command 
         printf("%s\n", dirStructArray[i].d_name);
         i++;
     }
-
     closedir(dir);
-
 }
 
 void sortDirStruct(struct dirent array[],int length){
-    for(int i = 0; i < length-1; i++){
+    for (int i = 0; i < length-1; i++){
         int index = i;
-        for(int j = i+1; j <length; j++){
+        for (int j = i+1; j <length; j++){
             char* minName = array[index].d_name;
             char* currentName = array[j].d_name;
-            if(strcmp(currentName,minName)<= 0){
+            if (strcmp(currentName,minName)<= 0){
                 index = j;
             }
         }
@@ -130,7 +125,7 @@ void getDirectoryFiles(char* directory,bool ilR_Array[]){
 
     int length = 0;
     struct dirent dirStructArray[70];
-    while((dirStruct = readdir(dir)) != NULL){
+    while ((dirStruct = readdir(dir)) != NULL){
         dirStructArray[length] = *dirStruct;
         length++;
     }
@@ -140,25 +135,21 @@ void getDirectoryFiles(char* directory,bool ilR_Array[]){
     int largestDigit = 0;
     int largestFileDigit = 0;
 
+    while(j<length){
+         largestDigit = inodeDigitCounter(directory,dirStructArray[j].d_name,largestDigit);
+         largestFileDigit = fileSizeDigitCounter(directory, dirStructArray[j].d_name, largestFileDigit);
+         j++;
+    }
     
-        while(j<length){
-            largestDigit = inodeDigitCounter(directory,dirStructArray[j].d_name,largestDigit);
-            largestFileDigit = fileSizeDigitCounter(directory, dirStructArray[j].d_name, largestFileDigit);
-            j++;
-        }
-    
-
     int i = 0;
     while(i < length){
         char* name = dirStructArray[i].d_name;
-        if(strcmp(name,".") != 0 && strcmp(name,"..") != 0 && checkHiddenFile(dirStructArray[i].d_name)){
+        if (strcmp(name,".") != 0 && strcmp(name,"..") != 0 && checkHiddenFile(dirStructArray[i].d_name)){
             universalPrint(directory,name,ilR_Array,largestDigit, largestFileDigit);
         }
         i++;
     }
-
     closedir(dir);
-
 }
 
 void getAndPrintGroup(gid_t grpNum)
@@ -186,11 +177,10 @@ void getAndPrintUserName(uid_t uid)
     }
 }
 
-void printDate(time_t date){
+void printDate(time_t date) {
 char dateArr[19];
 strftime(dateArr, 19, "%b %e %Y %H:%M", localtime(&date));
 printf("%s ",dateArr);
-
 }
 
 void printMode(mode_t mode){
@@ -216,10 +206,10 @@ void printFile(char* File,bool ilR_Array[],int padding){
         perror("Error getting file information.\n");
     }
 
-    if(ilR_Array[0]){
+    if (ilR_Array[0]){
         printf("%*.llu ",padding,(unsigned long long) fileInfo.st_ino);
     }
-    if(ilR_Array[1]){
+    if (ilR_Array[1]){
         printMode(fileInfo.st_mode);
         printf("%ld ", (long) fileInfo.st_nlink);
         getAndPrintUserName(fileInfo.st_uid);
@@ -228,13 +218,11 @@ void printFile(char* File,bool ilR_Array[],int padding){
         printDate(fileInfo.st_mtime);
     }
 
-   
     if (hasInvalidChar(File)) {
         printf("'%s'", File);
     } else {
         printf("%s", File);
-    }
-    
+    }  
     printf("\n");
 }
 
@@ -255,7 +243,7 @@ int inodeDigitCounter(char* path,char* name,int largestNum){
         count++;
         inodeNum /= 10;
 
-    } while(inodeNum != 0);
+    } while (inodeNum != 0);
     free(temp);
 
     if(count >= largestNum){
@@ -268,7 +256,7 @@ int inodeDigitCounter(char* path,char* name,int largestNum){
 
 int fileSizeDigitCounter(char* path,char* name,int largestNum){
     
-    if(strcmp(name,".") == 0 || strcmp(name,"..") == 0 || checkHiddenFile(name) == 0){
+    if (strcmp(name,".") == 0 || strcmp(name,"..") == 0 || checkHiddenFile(name) == 0){
             return largestNum;
     }
     char *temp = (char *)malloc(1024 * sizeof(char));
@@ -279,12 +267,12 @@ int fileSizeDigitCounter(char* path,char* name,int largestNum){
     getFileInfo(temp,&fileInfo);
     unsigned long long Bytesize = (unsigned long long) fileInfo.st_size;
     int count = 0;
-     do
+    do
     {
         count++;
         Bytesize /= 10;
 
-    } while(Bytesize != 0);
+    } while (Bytesize != 0);
     free(temp);
 
     if(count >= largestNum){
